@@ -1,0 +1,43 @@
+---
+import Base from '../layouts/Base.astro';
+import Split from '../components/Split.astro';
+import AppCard from '../components/AppCard.astro';
+import SiteCard from '../components/SiteCard.astro';
+import SectionHead from '../components/SectionHead.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { apps, websites, company } from '../data/site';
+---
+<Base title="Work" description="Apps and websites built by 5INCH Ventures: Zeromeds, Retailer, Fleet, Distributor and Rider apps, branded apps for Chakradhar and Pavan Distributors, fastwhistle.com and kunthunathmedicalagency.com.">
+  <section class="page-hero">
+    <div class="grid-bg" aria-hidden="true"></div>
+    <div class="wrap">
+      <p class="eyebrow" data-reveal><b>WORK</b> Portfolio</p>
+      <h1 class="h1 split-h"><Split text="Shipped, live" /> <Split text="and in people’s pockets." start={2} cls="grad" /></h1>
+      <p class="lead" data-reveal style="--d:.12s">Seven apps on Google Play and the App Store, and the websites behind them. Tap any store button to try them yourself.</p>
+      <div class="filters" data-reveal style="--d:.18s">
+        <a class="tag" href="#apps">Apps · {apps.length}</a>
+        <a class="tag" href="#websites">Websites · {websites.length}</a>
+        <a class="tag" href={company.stores.play} target="_blank" rel="noopener noreferrer">Our Google Play page ↗</a>
+      </div>
+    </div>
+  </section>
+  <section class="section" id="apps">
+    <div class="wrap">
+      <SectionHead fig="APPS" label="Android & iOS" title="Mobile apps" />
+      <div class="grid-3">{apps.map((a, i) => <AppCard app={a} i={i} />)}</div>
+    </div>
+  </section>
+  <section class="section" id="websites">
+    <div class="wrap">
+      <SectionHead fig="WEB" label="Websites" title="Websites" />
+      <div class="grid-2">{websites.map((s, i) => <SiteCard site={s} i={i} />)}</div>
+    </div>
+  </section>
+  <CtaBand title="Your app could be next on this page." />
+</Base>
+<style>
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; }
+  .filters .tag { min-height: 34px; padding: 0 14px; text-decoration: none; color: var(--text); transition: border-color .2s; }
+  .filters .tag:hover { border-color: var(--accent); }
+  #apps, #websites { scroll-margin-top: 80px; }
+</style>

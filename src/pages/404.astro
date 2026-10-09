@@ -1,0 +1,19 @@
+---
+import { u } from '../lib/url';
+import Base from '../layouts/Base.astro';
+import Split from '../components/Split.astro';
+---
+<Base title="Page not found" noindex>
+  <section class="page-hero" style="border-bottom:0;min-height:60vh;display:flex;align-items:center">
+    <div class="grid-bg" aria-hidden="true"></div>
+    <div class="wrap">
+      <p class="eyebrow"><b>404</b> Route not found</p>
+      <h1 class="h1 split-h"><Split text="This page took a" /> <Split text="wrong turn." start={4} cls="grad" /></h1>
+      <p class="lead">Even our riders need a map sometimes. Let’s get you back on route.</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:28px">
+        <a class="btn btn-primary" href={u('/')}>Back to home</a>
+        <a class="btn btn-ghost" href={u('/contact')}>Contact us</a>
+      </div>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,191 @@
+---
+import { u } from '../lib/url';
+import Logo from './Logo.astro';
+import { nav } from '../data/site';
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) => path === href || path.startsWith(href + '/');
+---
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a href={u('/')} class="nav-logo"><Logo /><span class="sr-only"> home</span></a>
+    <nav aria-label="Primary" class="nav-links">
+      {nav.map((l) => <a href={l.href} class:list={[{ active: isActive(l.href) }]} aria-current={isActive(l.href) ? 'page' : undefined}>{l.label}</a>)}
+    </nav>
+    <div class="nav-cta">
+      <button class="theme-btn" type="button" aria-label="Switch to light theme" title="Toggle light / dark">
+        <span class="sky" aria-hidden="true"></span>
+        <!-- Sun: glowing gradient disc with tapered rays (long and short alternating). -->
+        <svg class="sun" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+          <defs>
+            <radialGradient id="sun-core" cx="40%" cy="38%" r="70%">
+              <stop offset="0" stop-color="#fff6c9" />
+              <stop offset="0.45" stop-color="#ffd25e" />
+              <stop offset="1" stop-color="#ff9a1f" />
+            </radialGradient>
+            <radialGradient id="sun-glow">
+              <stop offset="0.35" stop-color="#ffc24a" stop-opacity="0.55" />
+              <stop offset="1" stop-color="#ffc24a" stop-opacity="0" />
+            </radialGradient>
+            <linearGradient id="sun-ray" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ffb02e" stop-opacity="0.35" />
+              <stop offset="1" stop-color="#ffc94d" />
+            </linearGradient>
+          </defs>
+          <circle class="sun-glow" cx="12" cy="12" r="11" fill="url(#sun-glow)" />
+          <g class="sun-rays" fill="url(#sun-ray)" stroke-linejoin="round">
+            {[0, 45, 90, 135, 180, 225, 270, 315].map((a, i) => (
+              <path d={i % 2 ? 'M12 2.6 13.05 5.5H10.95Z' : 'M12 0.9 13.25 5.3H10.75Z'} transform={`rotate(${a} 12 12)`} />
+            ))}
+          </g>
+          <circle cx="12" cy="12" r="5.4" fill="url(#sun-core)" />
+          <circle cx="10.3" cy="10.2" r="1.6" fill="#fff" opacity="0.5" />
+        </svg>
+        <!-- Moon: shaded crescent with craters, plus a few twinkling stars. -->
+        <svg class="moon" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+          <defs>
+            <radialGradient id="moon-face" cx="30%" cy="35%" r="80%">
+              <stop offset="0" stop-color="#fffbea" />
+              <stop offset="0.55" stop-color="#e9e4d2" />
+              <stop offset="1" stop-color="#b9b3a0" />
+            </radialGradient>
+            <mask id="moon-cut">
+              <rect width="24" height="24" fill="#fff" />
+              <circle cx="16.2" cy="8.4" r="6.9" fill="#000" />
+            </mask>
+          </defs>
+          <g mask="url(#moon-cut)">
+            <circle cx="11" cy="13" r="8" fill="url(#moon-face)" />
+            <circle cx="6.6" cy="13.4" r="1.45" fill="#a9a290" opacity="0.55" />
+            <circle cx="9.6" cy="18" r="1.05" fill="#a9a290" opacity="0.5" />
+            <circle cx="5.6" cy="9.6" r="0.75" fill="#a9a290" opacity="0.45" />
+            <circle cx="12.9" cy="19.6" r="0.6" fill="#a9a290" opacity="0.4" />
+          </g>
+          <g class="stars" fill="#fff">
+            <path class="st s1" d="M19.2 11.6 19.65 13.05 21.1 13.5 19.65 13.95 19.2 15.4 18.75 13.95 17.3 13.5 18.75 13.05Z" />
+            <path class="st s2" d="M15.6 3.2 15.9 4.1 16.8 4.4 15.9 4.7 15.6 5.6 15.3 4.7 14.4 4.4 15.3 4.1Z" />
+            <circle class="st s3" cx="21" cy="6.6" r="0.6" />
+          </g>
+        </svg>
+      </button>
+      <a href={u('/contact')} class="btn btn-primary nav-btn">Start a project <span class="arrow" aria-hidden="true">→</span></a>
+      <button class="menu" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="m-menu">
+        <span></span><span></span>
+      </button>
+    </div>
+  </div>
+  <div id="m-menu" class="m-menu" hidden>
+    <nav aria-label="Mobile" class="wrap">
+      {nav.map((l) => <a href={l.href} aria-current={isActive(l.href) ? 'page' : undefined}>{l.label}</a>)}
+      <a href={u('/contact')} class="btn btn-primary">Start a project →</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const btn = document.querySelector<HTMLButtonElement>('.menu');
+  const menu = document.getElementById('m-menu');
+  const header = document.querySelector('.nav');
+  btn?.addEventListener('click', () => {
+    const open = btn.getAttribute('aria-expanded') !== 'true';
+    btn.setAttribute('aria-expanded', String(open));
+    btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    if (menu) menu.hidden = !open;
+    document.documentElement.classList.toggle('menu-open', open);
+  });
+  // Light / dark toggle. The new theme spreads in a circle from the button (View Transitions API);
+  // browsers without it switch instantly.
+  const themeBtn = document.querySelector<HTMLButtonElement>('.theme-btn');
+  const label = () => {
+    const t = document.documentElement.getAttribute('data-theme');
+    themeBtn?.setAttribute('aria-label', t === 'light' ? 'Switch to dark theme' : 'Switch to light theme');
+  };
+  label();
+  themeBtn?.addEventListener('click', () => {
+    const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    const apply = () => {
+      document.documentElement.setAttribute('data-theme', next);
+      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', next === 'light' ? '#f6f8fc' : '#07090f');
+      try { localStorage.setItem('theme', next); } catch (e) {}
+      label();
+    };
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const doc = document as Document & { startViewTransition?: (cb: () => void) => { ready: Promise<void> } };
+    if (!doc.startViewTransition || reduce) return apply();
+    const r = themeBtn.getBoundingClientRect();
+    const x = r.left + r.width / 2;
+    const y = r.top + r.height / 2;
+    const radius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
+    doc.startViewTransition(apply).ready.then(() => {
+      document.documentElement.animate(
+        { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${radius}px at ${x}px ${y}px)`] },
+        { duration: 650, easing: 'cubic-bezier(0.4, 0, 0.2, 1)', pseudoElement: '::view-transition-new(root)' },
+      );
+    });
+  });
+  // Follow the system setting live, unless the visitor picked a theme themselves.
+  window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e) => {
+    let saved = null;
+    try { saved = localStorage.getItem('theme'); } catch (err) {}
+    if (saved) return;
+    document.documentElement.setAttribute('data-theme', e.matches ? 'light' : 'dark');
+    label();
+  });
+
+  const onScroll = () => header?.classList.toggle('scrolled', window.scrollY > 8);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+</script>
+
+<style>
+  .nav { position: sticky; top: 0; z-index: 50; transition: background-color 0.3s, border-color 0.3s; border-bottom: 1px solid transparent; }
+  .nav.scrolled { background: var(--nav-bg); -webkit-backdrop-filter: blur(16px) saturate(160%); backdrop-filter: blur(16px) saturate(160%); border-bottom-color: var(--line); }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; height: 72px; }
+  .nav-logo { text-decoration: none; display: inline-flex; min-height: 44px; align-items: center; }
+  .nav-links { display: flex; gap: 4px; }
+  .nav-links a { padding: 8px 14px; border-radius: 10px; font-size: 14.5px; color: var(--text-2); text-decoration: none; transition: color 0.2s, background-color 0.2s; }
+  .nav-links a:hover { color: var(--text); background: rgba(var(--tint), 0.05); }
+  .nav-links a.active { color: var(--text); background: rgba(var(--tint), 0.07); }
+  .nav-cta { display: flex; align-items: center; gap: 10px; }
+  .nav-btn { min-height: 42px; padding: 0 18px; font-size: 14px; }
+  .theme-btn { position: relative; width: 42px; height: 42px; border-radius: 12px; border: 1px solid var(--line-strong); background: rgba(var(--tint), 0.04); color: var(--text); cursor: pointer; display: inline-grid; place-items: center; overflow: hidden; transition: border-color 0.2s, background-color 0.2s, transform 0.4s var(--spring); }
+  .theme-btn:hover { border-color: var(--accent); transform: rotate(-12deg); }
+  /* Dark theme shows the sun (tap for day); light theme shows the moon on a night-sky tile (tap for night).
+     Switching, the sun sets below the edge while the moon rises in — and vice versa. */
+  .theme-btn svg { position: absolute; transition: transform 0.7s var(--spring), opacity 0.35s; }
+  .theme-btn .sky { position: absolute; inset: 0; background: radial-gradient(120% 90% at 30% 20%, #2b3a7a, #0d1533 70%); opacity: 0; transition: opacity 0.45s; }
+  .theme-btn .sun { filter: drop-shadow(0 0 4px rgba(255, 176, 46, 0.55)); }
+  .theme-btn .sun-rays { transform-origin: 12px 12px; }
+  .theme-btn:hover .sun-rays { animation: spin 6s linear infinite; }
+  .theme-btn:hover .sun-glow { animation: breathe 1.6s ease-in-out infinite; transform-origin: 12px 12px; }
+  .theme-btn .moon { filter: drop-shadow(0 0 3px rgba(255, 246, 214, 0.45)); }
+  .theme-btn .st { transform-box: fill-box; transform-origin: center; animation: twinkle 2.4s ease-in-out infinite; }
+  .theme-btn .s2 { animation-delay: -0.8s; }
+  .theme-btn .s3 { animation-delay: -1.6s; }
+  :global([data-theme='light']) .theme-btn { border-color: #1d2a5c; }
+  :global([data-theme='light']) .theme-btn .sky { opacity: 1; }
+  :global([data-theme='light']) .theme-btn .sun { transform: translateY(26px) rotate(60deg) scale(0.6); opacity: 0; }
+  :global([data-theme='dark']) .theme-btn .moon, :global(html:not([data-theme])) .theme-btn .moon { transform: translateY(-26px) rotate(-40deg) scale(0.6); opacity: 0; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes breathe { 50% { transform: scale(1.12); opacity: 0.8; } }
+  @keyframes twinkle { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.25; transform: scale(0.55); } }
+  @media (prefers-reduced-motion: reduce) {
+    .theme-btn svg, .theme-btn .sky { transition: none; }
+    .theme-btn .st, .theme-btn:hover .sun-rays, .theme-btn:hover .sun-glow { animation: none; }
+  }
+  .menu { display: none; width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--line-strong); background: rgba(var(--tint), 0.04); cursor: pointer; position: relative; }
+  .menu span { position: absolute; left: 13px; right: 13px; height: 1.5px; background: var(--text); border-radius: 2px; transition: transform 0.3s var(--ease), top 0.3s var(--ease); }
+  .menu span:first-child { top: 17px; }
+  .menu span:last-child { top: 25px; }
+  .menu[aria-expanded='true'] span:first-child { top: 21px; transform: rotate(45deg); }
+  .menu[aria-expanded='true'] span:last-child { top: 21px; transform: rotate(-45deg); }
+  .m-menu { border-top: 1px solid var(--line); background: var(--nav-solid); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); }
+  .m-menu nav { display: flex; flex-direction: column; padding-top: 12px; padding-bottom: 20px; }
+  .m-menu a:not(.btn) { padding: 14px 4px; border-bottom: 1px solid var(--line); color: var(--text); text-decoration: none; font-family: var(--font-display); font-size: 22px; }
+  .m-menu .btn { margin-top: 18px; }
+  @media (max-width: 960px) {
+    .nav-links { display: none; }
+    .menu { display: inline-block; }
+    .nav { background: var(--nav-bg); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); }
+  }
+  @media (max-width: 480px) { .nav-btn { display: none; } }
+</style>

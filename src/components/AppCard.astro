@@ -1,0 +1,44 @@
+---
+import type { App } from '../data/site';
+interface Props { app: App; i?: number; compact?: boolean }
+const { app, i = 0, compact = false } = Astro.props;
+---
+<article id={app.slug} class="card spot ac" style={`--a:${app.color};--d:${(i % 3) * 0.06}s`} data-reveal>
+  <div class="ac-top">
+    <img class="ac-icon" src={app.icon} alt={`${app.name} app icon`} width="56" height="56" loading="lazy" decoding="async" />
+    <div class="ac-meta">
+      <span class="ac-kind">{app.kind}</span>
+      <span class="ac-plat">{app.platforms.join(' · ')}{app.installs && <> · <b>{app.installs}</b> installs</>}</span>
+    </div>
+  </div>
+  <h3 class="h3">{app.name}</h3>
+  <p class="ac-sum">{app.summary}</p>
+  {!compact && <ul class="ac-f">{app.features.map((f) => <li>{f}</li>)}</ul>}
+  <div class="ac-stores">
+    {app.play && <a class="store" href={app.play} target="_blank" rel="noopener noreferrer" aria-label={`${app.name} on Google Play`}>
+      <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M4.2 2.6 13.5 12l-9.3 9.4c-.3-.2-.5-.6-.5-1V3.6c0-.4.2-.8.5-1Zm10.4 10.5 2.4 2.4-10.8 6.2 8.4-8.6Zm3.7-3.7 2.6 1.5c.8.5.8 1.7 0 2.2l-2.6 1.5-2.6-2.6 2.6-2.6ZM6.2 2.3 17 8.5l-2.4 2.4-8.4-8.6Z"/></svg>
+      Google Play</a>}
+    {app.appStore && <a class="store" href={app.appStore} target="_blank" rel="noopener noreferrer" aria-label={`${app.name} on the App Store`}>
+      <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M16.4 12.6c0-2.5 2-3.6 2.1-3.7-1.2-1.7-3-1.9-3.6-2-1.5-.2-3 .9-3.8.9-.8 0-2-.9-3.3-.9-1.7 0-3.3 1-4.2 2.6-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8 1.6 0 2 .8 3.4.8 1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9-.1 0-2.9-1.1-2.9-4.3ZM14 5.2c.7-.8 1.2-2 1-3.2-1 .1-2.2.7-2.9 1.5-.6.7-1.2 1.9-1 3.1 1.1.1 2.2-.6 2.9-1.4Z"/></svg>
+      App Store</a>}
+  </div>
+</article>
+
+<style>
+  .ac { display: flex; flex-direction: column; gap: 12px; height: 100%; }
+  .ac-top { display: flex; align-items: center; gap: 14px; }
+  .ac-icon { flex: none; width: 56px; height: 56px; border-radius: 15px; object-fit: cover; background: #fff; box-shadow: 0 0 0 1px rgba(var(--tint), 0.08), 0 12px 28px -10px var(--a); transition: transform 0.5s var(--spring); }
+  .ac:hover .ac-icon { transform: rotate(-8deg) scale(1.06); }
+  .ac-meta { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+  .ac-kind { font: 500 12px var(--font-mono); letter-spacing: 0.04em; color: var(--muted); }
+  .ac-plat { font-size: 13px; color: var(--text-2); }
+  .ac-plat b { color: var(--signal-text); font-weight: 600; }
+  .ac .h3 { margin-top: 4px; }
+  .ac-sum { margin: 0; color: var(--text-2); font-size: 15px; }
+  .ac-f { list-style: none; margin: 2px 0 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 6px 12px; font-size: 13.5px; color: var(--text-2); }
+  .ac-f li { display: flex; gap: 8px; }
+  .ac-f li::before { content: ''; flex: none; width: 5px; height: 5px; margin-top: 8px; border-radius: 50%; background: var(--a); }
+  .ac-stores { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; padding-top: 8px; }
+  .store { display: inline-flex; align-items: center; gap: 7px; min-height: 36px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--line-strong); background: rgba(var(--tint), 0.03); color: var(--text); font-size: 13px; font-weight: 500; text-decoration: none; transition: border-color .2s, background-color .2s; }
+  .store:hover { border-color: var(--a); background: rgba(var(--tint), 0.06); }
+</style>

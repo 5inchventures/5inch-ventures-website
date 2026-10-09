@@ -1,0 +1,33 @@
+---
+import { u } from '../lib/url';
+import { whatsapp } from '../data/site';
+interface Props { title?: string; text?: string }
+const { title = 'Got an app idea, or a process stuck in spreadsheets?', text = 'Tell us about it. In one call we’ll sketch the product, the screens you need and what it would take to launch.' } = Astro.props;
+---
+<section class="cta">
+  <div class="wrap">
+    <div class="cta-box" data-reveal>
+      <div class="grid-bg" aria-hidden="true"></div>
+      <div class="glow" style="width:420px;height:420px;left:-120px;top:-180px;background:#5b7cff" aria-hidden="true"></div>
+      <div class="glow" style="width:360px;height:360px;right:-100px;bottom:-200px;background:#3ddc97;opacity:.3" aria-hidden="true"></div>
+      <div class="cta-inner">
+        <p class="eyebrow"><b>●</b> Start a project</p>
+        <h2 class="h2">{title}</h2>
+        <p class="lead">{text}</p>
+        <div class="cta-actions">
+          <a href={u('/contact')} class="btn btn-primary">Book a 30-min call <span class="arrow" aria-hidden="true">→</span></a>
+          <a href={whatsapp()} class="btn btn-ghost" target="_blank" rel="noopener noreferrer">Message on WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta { padding: 40px 0 clamp(72px, 10vw, 120px); }
+  .cta-box { position: relative; overflow: hidden; border: 1px solid var(--line-strong); border-radius: 32px; padding: clamp(36px, 6vw, 80px); background: radial-gradient(120% 120% at 0% 0%, rgba(91, 124, 255, 0.12), transparent 60%), var(--bg-2); }
+  .cta-inner { position: relative; max-width: 760px; }
+  .cta-inner .h2 { margin-top: 14px; }
+  .cta-inner .lead { margin: 18px 0 0; }
+  .cta-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+</style>

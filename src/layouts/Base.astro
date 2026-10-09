@@ -1,0 +1,84 @@
+---
+import { u } from '../lib/url';
+import '@fontsource-variable/space-grotesk';
+import '@fontsource-variable/inter';
+import '@fontsource-variable/jetbrains-mono';
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { company } from '../data/site';
+
+interface Props { title?: string; description?: string; noindex?: boolean }
+const { title, description = company.description, noindex = false } = Astro.props;
+const fullTitle = title ? `${title} — ${company.name}` : `${company.name} — ${company.tagline}`;
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+const ogImage = new URL(u('/og.png'), Astro.site).toString();
+
+const orgLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: company.legalName,
+  alternateName: company.name,
+  url: company.url,
+  logo: new URL(u('/favicon.svg'), Astro.site).toString(),
+  email: company.email,
+  telephone: `+${company.phoneRaw}`,
+  description: company.description,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'A/202, Bella Casa Apartment, Althan Canal Road, Althan',
+    addressLocality: 'Surat',
+    addressRegion: 'Gujarat',
+    postalCode: '395017',
+    addressCountry: 'IN',
+  },
+  foundingDate: String(company.since),
+  sameAs: [company.stores.play],
+};
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="theme-color" content="#07090f" />
+    <meta name="color-scheme" content="dark light" />
+    <!-- Theme before first paint: saved choice, else the visitor's system setting. Avoids a flash. -->
+    <script is:inline>
+      (function () {
+        var saved = null;
+        try { saved = localStorage.getItem('theme'); } catch (e) {}
+        var theme = saved === 'light' || saved === 'dark' ? saved : (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+        document.documentElement.setAttribute('data-theme', theme);
+        var m = document.querySelector('meta[name="theme-color"]');
+        if (m) m.setAttribute('content', theme === 'light' ? '#f6f8fc' : '#07090f');
+      })();
+    </script>
+    <link rel="icon" href={u('/favicon.svg')} type="image/svg+xml" />
+    <link rel="sitemap" href={u('/sitemap-index.xml')} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={company.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script is:inline>document.documentElement.classList.add('js');</script>
+    <script type="application/ld+json" set:html={JSON.stringify(orgLd)} />
+  </head>
+  <body>
+    <a href="#main" class="skip">Skip to content</a>
+    <Nav />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <script>import '../scripts/motion.ts';</script>
+  </body>
+</html>

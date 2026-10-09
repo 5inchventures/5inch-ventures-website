@@ -1,0 +1,34 @@
+---
+interface Props { site: { slug: string; name: string; url: string; host: string; kind: string; summary: string; highlights: string[]; color: string; shot: string }; i?: number }
+const { site, i = 0 } = Astro.props;
+---
+<article id={site.slug} class="card spot sc" style={`--a:${site.color};--d:${i * 0.08}s`} data-reveal>
+  <a class="sc-frame" href={site.url} target="_blank" rel="noopener noreferrer" aria-label={`Visit ${site.name} (${site.host})`}>
+    <div class="sc-bar" aria-hidden="true"><i></i><i></i><i></i><span>{site.host}</span></div>
+    <div class="sc-view">
+      <img src={site.shot} alt={`Screenshot of the ${site.name} website`} width="900" loading="lazy" decoding="async" />
+    </div>
+  </a>
+  <p class="sc-kind">{site.kind}</p>
+  <h3 class="h3">{site.name}</h3>
+  <p class="sc-sum">{site.summary}</p>
+  <div class="sc-tags">{site.highlights.map((h) => <span class="tag">{h}</span>)}</div>
+  <a class="link" href={site.url} target="_blank" rel="noopener noreferrer">Visit {site.host} <span aria-hidden="true">↗</span></a>
+</article>
+
+<style>
+  .sc { display: flex; flex-direction: column; gap: 12px; }
+  .sc-frame { display: block; border-radius: 16px; overflow: hidden; border: 1px solid var(--line-strong); background: var(--surface); text-decoration: none; margin-bottom: 8px; }
+  .sc-bar { display: flex; align-items: center; gap: 6px; padding: 10px 12px; border-bottom: 1px solid var(--line); background: rgba(var(--tint), 0.03); }
+  .sc-bar i { width: 9px; height: 9px; border-radius: 50%; background: #2a3247; }
+  .sc-bar span { margin-left: 8px; padding: 3px 12px; border-radius: 999px; background: rgba(var(--tint), 0.05); font: 500 11.5px var(--font-mono); color: var(--text-2); }
+  /* Real screenshot: shows the top of the page; on hover it scrolls slowly down the site. */
+  .sc-view { position: relative; height: clamp(220px, 26vw, 300px); overflow: hidden; background: #fff; }
+  .sc-view img { display: block; width: 100%; height: auto; transform: translateY(0); transition: transform 7s cubic-bezier(0.45, 0, 0.25, 1); }
+  .sc-frame:hover .sc-view img, .sc-frame:focus-visible .sc-view img { transform: translateY(calc(-100% + clamp(220px, 26vw, 300px))); }
+  .sc-view::after { content: ''; position: absolute; inset: auto 0 0; height: 40px; background: linear-gradient(transparent, rgba(11, 16, 32, 0.25)); pointer-events: none; }
+  @media (prefers-reduced-motion: reduce) { .sc-view img { transition: none; } .sc-frame:hover .sc-view img { transform: none; } }
+  .sc-kind { margin: 0; font: 500 12px var(--font-mono); letter-spacing: 0.04em; color: var(--muted); }
+  .sc-sum { margin: 0; color: var(--text-2); font-size: 15px; }
+  .sc-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+</style>

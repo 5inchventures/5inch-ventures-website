@@ -1,0 +1,98 @@
+---
+import Base from '../layouts/Base.astro';
+import Split from '../components/Split.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { services, process, industries, capabilities } from '../data/site';
+---
+<Base title="Services" description="Mobile apps, web platforms and dashboards, B2B ordering apps, delivery and field-force apps, websites and white-label apps — designed, built and launched by 5INCH Ventures.">
+  <section class="page-hero">
+    <div class="grid-bg" aria-hidden="true"></div>
+    <div class="wrap">
+      <p class="eyebrow" data-reveal><b>SERVICES</b> Build with us</p>
+      <h1 class="h1 split-h"><Split text="Everything you need to" /> <Split text="launch a product." start={4} cls="grad" /></h1>
+      <p class="lead" data-reveal style="--d:.12s">Design, build, publish and grow — with one small senior team. The people on your first call are the people who build your product.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap svc-list">
+      {services.map((s, i) => (
+        <article id={s.id} class="card spot svc" data-reveal>
+          <div class="svc-head">
+            <span class="svc-n">{String(i + 1).padStart(2, '0')}</span>
+            <h2 class="h3 svc-t">{s.title}</h2>
+          </div>
+          <p class="svc-sum">{s.summary}</p>
+          <ul class="svc-d">{s.deliverables.map((d) => <li>{d}</li>)}</ul>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head"><div data-reveal><p class="eyebrow"><b>SKILLS</b> What we bring</p><h2 class="h2">Capabilities</h2></div></div>
+      <div class="caps" data-reveal>{capabilities.map((c) => <span class="tag">{c}</span>)}</div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <div data-reveal>
+          <p class="eyebrow"><b>PROCESS</b> How an engagement runs</p>
+          <h2 class="h2">Working software <span class="muted">every week.</span></h2>
+        </div>
+        <p class="lead" data-reveal style="--d:.08s">Fixed-scope projects or an ongoing team — either way you see a running build early and often.</p>
+      </div>
+      <ol class="steps">
+        {process.map((p, i) => (
+          <li data-reveal style={`--d:${i * 0.08}s`}>
+            <span class="tag">{p.step} · {p.duration}</span>
+            <h3 class="h3">{p.title}</h3>
+            <p>{p.text}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <div data-reveal>
+          <p class="eyebrow"><b>INDUSTRIES</b> Where we’re strongest</p>
+          <h2 class="h2">Businesses that <span class="muted">run on the road.</span></h2>
+        </div>
+      </div>
+      <div class="grid-2">
+        {industries.map((ind, i) => (
+          <div class="card" data-reveal style={`--d:${(i % 2) * 0.06}s`}>
+            <h3 class="h3">{ind.name}</h3>
+            <p class="muted" style="margin:10px 0 0">{ind.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+  <CtaBand />
+</Base>
+<style>
+  .caps { display: flex; flex-wrap: wrap; gap: 10px; }
+  .caps .tag { min-height: 38px; padding: 0 16px; font-size: 13.5px; color: var(--text); }
+  .svc-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .svc { scroll-margin-top: 96px; display: flex; flex-direction: column; gap: 14px; }
+  .svc-head { display: flex; align-items: baseline; gap: 14px; }
+  .svc-n { font: 500 13px var(--font-mono); color: var(--signal-text); }
+  .svc-t { font-size: clamp(22px, 2.4vw, 28px); }
+  .svc-sum { margin: 0; color: var(--text-2); }
+  .svc-d { list-style: none; margin: 4px 0 0; padding: 16px 0 0; border-top: 1px solid var(--line); display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; font-size: 14.5px; }
+  .svc-d li { display: flex; gap: 8px; }
+  .svc-d li::before { content: '→'; color: var(--accent-2); }
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+  .steps li { padding: 24px; border: 1px solid var(--line); border-radius: var(--radius-lg); background: rgba(var(--tint), 0.02); display: flex; flex-direction: column; gap: 12px; }
+  .steps li .tag { align-self: flex-start; }
+  .steps p { margin: 0; color: var(--text-2); font-size: 15px; }
+  @media (max-width: 1000px) { .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 680px) { .svc-list, .steps, .svc-d { grid-template-columns: 1fr; } }
+</style>

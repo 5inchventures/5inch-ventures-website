@@ -1,0 +1,13 @@
+---
+/**
+ * Splits text into word spans at build time so headlines can animate word-by-word from the very
+ * first paint (no JS needed, no flash). `start` offsets the stagger index when a heading is made
+ * of several Split pieces; `cls` is added to every word (e.g. "grad" for gradient words).
+ */
+interface Props { text: string; start?: number; cls?: string }
+const { text, start = 0, cls = '' } = Astro.props;
+const words = text.split(/\s+/).filter(Boolean);
+---
+{words.map((w, i) => (
+  <><span class:list={['w', cls]} style={`--i:${start + i};--j:${i}`}>{w}</span>{i < words.length - 1 ? ' ' : ''}</>
+))}

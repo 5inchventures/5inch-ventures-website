@@ -1,0 +1,79 @@
+---
+import Base from '../layouts/Base.astro';
+import Split from '../components/Split.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { company, stats } from '../data/site';
+const beliefs = [
+  { t: 'Sit with the people who use it', d: 'Our best features came from watching retailers, riders and managers work — not from a requirements document.' },
+  { t: 'Ship, then improve', d: 'A working build early beats a perfect plan late. We launch, measure and keep making it better.' },
+  { t: 'Small team, senior hands', d: 'One tight team owns design, build, store publishing and support — no hand-offs, no lost context.' },
+  { t: 'Clarity over cleverness', d: 'Simple screens, clear flows and dependable apps. Fancy is easy; easy is hard.' },
+];
+---
+<Base title="About" description="5INCH VENTURES PRIVATE LIMITED is a product studio in Surat, building mobile apps, web platforms and websites since 2020.">
+  <section class="page-hero">
+    <div class="grid-bg" aria-hidden="true"></div>
+    <div class="wrap">
+      <p class="eyebrow" data-reveal><b>ABOUT</b> {company.legalName}</p>
+      <h1 class="h1 split-h"><Split text="A product studio that" /> <Split text="ships." start={4} cls="grad" /></h1>
+      <p class="lead" data-reveal style="--d:.12s">We’re a team in Surat that turns business problems into apps and platforms people use every day — and we’ve been doing it since {company.since}.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap story">
+      <div data-reveal>
+        <p class="eyebrow"><b>01</b> Our story</p>
+        <h2 class="h2" style="margin-top:14px">The name is the <span class="muted">screen we build for.</span></h2>
+      </div>
+      <div class="story-text" data-reveal style="--d:.08s">
+        <p>Five inches — the screen in your pocket. That’s where most of our work lives: ordering apps for chemists, branded apps for distributors, and tools for riders and field teams who never sit at a desk.</p>
+        <p>Our own products taught us what it takes to run software in the real world: offline moments, busy users, payments and deliveries that can’t wait. We bring those lessons to every client project.</p>
+        <p>Today we design, build and publish for businesses that want software their teams will actually love using — and we stay on to keep it growing.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <dl class="nums">
+        {stats.map((s) => (<div data-reveal><dt>{s.label}</dt><dd data-count={s.value}>{s.value}</dd></div>))}
+      </dl>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head"><div data-reveal><p class="eyebrow"><b>02</b> What we believe</p><h2 class="h2">How we <span class="muted">work.</span></h2></div></div>
+      <div class="grid-2">
+        {beliefs.map((b, i) => (<div class="card spot" data-reveal style={`--d:${(i % 2) * 0.06}s`}><h3 class="h3">{b.t}</h3><p class="muted" style="margin:10px 0 0">{b.d}</p></div>))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head"><div data-reveal><p class="eyebrow"><b>03</b> Where we are</p><h2 class="h2">Surat, <span class="muted">Gujarat.</span></h2></div></div>
+      <div class="grid-2">
+        {company.offices.map((o, i) => (
+          <div class="card" data-reveal style={`--d:${i * 0.06}s`}>
+            <p class="eyebrow" style="margin:0">{o.label}</p>
+            <p style="margin:14px 0 18px;color:var(--text)">{o.address}</p>
+            <a class="link" href={o.map} target="_blank" rel="noopener noreferrer">Open in Maps ↗</a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+  <CtaBand />
+</Base>
+<style>
+  .story { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 56px; }
+  .story-text p { margin: 0 0 18px; color: var(--text-2); font-size: 17px; line-height: 1.7; }
+  .nums { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 0; border: 1px solid var(--line); border-radius: var(--radius-lg); }
+  .nums div { padding: 26px; display: flex; flex-direction: column-reverse; gap: 6px; }
+  .nums div + div { border-left: 1px solid var(--line); }
+  .nums dt { color: var(--text-2); font-size: 14.5px; }
+  .nums dd { margin: 0; font: 600 clamp(34px, 4vw, 48px) / 1 var(--font-display); letter-spacing: -0.03em; }
+  @media (max-width: 860px) { .story { grid-template-columns: 1fr; gap: 24px; } .nums { grid-template-columns: 1fr 1fr; } .nums div:nth-child(3) { border-left: 0; } .nums div:nth-child(n + 3) { border-top: 1px solid var(--line); } }
+</style>

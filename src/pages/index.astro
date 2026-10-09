@@ -1,0 +1,193 @@
+---
+import { u } from '../lib/url';
+import Base from '../layouts/Base.astro';
+import Split from '../components/Split.astro';
+import HeroShowcase from '../components/HeroShowcase.astro';
+import SectionHead from '../components/SectionHead.astro';
+import AppCard from '../components/AppCard.astro';
+import SiteCard from '../components/SiteCard.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { company, stats, apps, websites, services, capabilities, process, industries } from '../data/site';
+const featured = apps.slice(0, 6);
+---
+<Base>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="grid-bg" aria-hidden="true"></div>
+    <div class="glow" style="width:620px;height:620px;left:-220px;top:-260px;background:#5b7cff;opacity:.35" aria-hidden="true"></div>
+    <div class="glow" style="width:480px;height:480px;right:-160px;top:40px;background:#3ddc97;opacity:.14" aria-hidden="true"></div>
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <a class="pill" href={company.stores.play} target="_blank" rel="noopener noreferrer" data-reveal>
+          <span>LIVE</span> 7 apps published on Google Play & App Store <span aria-hidden="true">↗</span>
+        </a>
+        <h1 class="h1 split-h"><Split text="We build apps" /> <Split text="people actually use." start={3} cls="grad" /></h1>
+        <p class="lead" data-reveal style="--d:.12s">
+          {company.name} is a product studio from Surat. We design and build mobile apps, web platforms and business
+          software — and take them all the way to the App Store and Google Play.
+        </p>
+        <div class="hero-actions" data-reveal style="--d:.18s">
+          <a href={u('/contact')} class="btn btn-primary">Start a project <span class="arrow" aria-hidden="true">→</span></a>
+          <a href={u('/work')} class="btn btn-ghost">See our work</a>
+        </div>
+        <p class="hero-note" data-reveal style="--d:.24s"><span class="dot" aria-hidden="true"></span> Android · iOS · Web — design to launch</p>
+      </div>
+      <div class="hero-vis" data-reveal style="--d:.15s">
+        <HeroShowcase />
+      </div>
+    </div>
+
+    <div class="wrap">
+      <dl class="stats">
+        {stats.map((s, i) => (
+          <div class="stat" data-reveal style={`--d:${i * 0.06}s`}>
+            <dt class="sr-only">{s.label}</dt>
+            <dd>
+              <span class="stat-v" data-count={s.value}>{s.value}</span>
+              <span class="stat-l">{s.label}</span>
+              <span class="stat-n">{s.note}</span>
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  <!-- What we build -->
+  <section class="section" id="services">
+    <div class="wrap">
+      <SectionHead fig="01" label="What we build" title="From idea to <span class='muted'>live on the stores.</span>" lead="Six things we do really well — the same things we’ve shipped for distributors, brands and our own products." />
+      <ol class="svc">
+        {services.map((s, i) => (
+          <li class="svc-row" data-reveal style={`--d:${(i % 2) * 0.06}s`}>
+            <a href={u(`/services#${s.id}`)}>
+              <span class="svc-n">{String(i + 1).padStart(2, '0')}</span>
+              <span class="svc-t">{s.title}</span>
+              <span class="svc-s">{s.summary}</span>
+              <span class="svc-go" aria-hidden="true">→</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+      <div class="caps" data-reveal>
+        {capabilities.map((c) => <span class="tag">{c}</span>)}
+      </div>
+    </div>
+  </section>
+
+  <!-- Apps -->
+  <section class="section" id="apps">
+    <div class="wrap">
+      <SectionHead fig="02" label="Apps we’ve shipped" title="Live on Google Play <span class='muted'>and the App Store.</span>" lead="Every app below was designed, built and published by our team — for our own products and for distributors under their brand." />
+      <div class="grid-3">
+        {featured.map((a, i) => <AppCard app={a} i={i} compact />)}
+      </div>
+      <p class="more" data-reveal><a class="link" href={u('/work')}>See all 7 apps and websites →</a></p>
+    </div>
+  </section>
+
+  <!-- Websites -->
+  <section class="section" id="websites">
+    <div class="wrap">
+      <SectionHead fig="03" label="Websites" title="Websites that <span class='muted'>work as hard as the product.</span>" lead="Fast, search-friendly sites with motion and storytelling — built to turn visitors into enquiries." />
+      <div class="grid-2">
+        {websites.map((s, i) => <SiteCard site={s} i={i} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- Process -->
+  <section class="section" id="process">
+    <div class="wrap">
+      <SectionHead fig="04" label="Process" title="From first call to <span class='muted'>launch day.</span>" />
+      <ol class="proc">
+        {process.map((p, i) => (
+          <li class="proc-step" data-reveal style={`--d:${i * 0.08}s`}>
+            <span class="proc-n">{p.step}</span>
+            <h3 class="h3">{p.title}</h3>
+            <p>{p.text}</p>
+            <span class="tag">{p.duration}</span>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- Industries -->
+  <section class="section" id="industries">
+    <div class="wrap">
+      <SectionHead fig="05" label="Industries" title="We know businesses <span class='muted'>that run on the road.</span>" />
+      <div class="ind">
+        {industries.map((ind, i) => (
+          <div class="ind-i" data-reveal style={`--d:${i * 0.06}s`}>
+            <h3 class="ind-h">{ind.name}</h3>
+            <p>{ind.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>
+
+<style>
+  .hero { position: relative; padding: clamp(40px, 6vw, 80px) 0 clamp(56px, 7vw, 88px); overflow: hidden; }
+  .hero-grid { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(32px, 5vw, 72px); align-items: center; }
+  .hero-copy .h1 { margin-top: 22px; }
+  .hero-copy .lead { margin: 22px 0 0; max-width: 560px; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+  .hero-note { display: flex; align-items: center; gap: 10px; margin: 26px 0 0; font: 500 12.5px var(--font-mono); color: var(--muted); }
+  .hero-vis { min-width: 0; }
+
+  .stats { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: clamp(48px, 7vw, 88px) 0 0; border: 1px solid var(--line); border-radius: var(--radius-lg); background: rgba(var(--tint), 0.02); }
+  .stat { padding: 26px 28px; }
+  .stat + .stat { border-left: 1px solid var(--line); }
+  .stat dd { margin: 0; display: flex; flex-direction: column; gap: 4px; }
+  .stat-v { font: 600 clamp(34px, 4vw, 48px) / 1 var(--font-display); letter-spacing: -0.03em; color: var(--text); }
+  .stat-l { color: var(--text); font-size: 15px; margin-top: 6px; }
+  .stat-n { color: var(--muted); font-size: 13px; }
+
+  .svc { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+  .svc-row a { display: grid; grid-template-columns: 56px minmax(0, 0.9fr) minmax(0, 1.4fr) 32px; gap: 24px; align-items: center; padding: 24px 8px; border-bottom: 1px solid var(--line); text-decoration: none; transition: background-color 0.3s var(--ease), padding 0.4s var(--ease); }
+  .svc-row a:hover { background: rgba(91, 124, 255, 0.05); padding-left: 18px; }
+  .svc-n { font: 500 13px var(--font-mono); color: var(--muted); }
+  .svc-t { font: 600 clamp(19px, 2vw, 24px) var(--font-display); letter-spacing: -0.02em; color: var(--text); }
+  .svc-s { color: var(--text-2); font-size: 15px; }
+  .svc-go { color: var(--accent-2); font-size: 20px; transition: transform 0.4s var(--spring); }
+  .svc-row a:hover .svc-go { transform: translateX(6px); }
+  .caps { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; }
+  .caps .tag { min-height: 32px; padding: 0 13px; font-size: 12.5px; color: var(--text); }
+  .more { margin: 28px 0 0; }
+
+  .proc { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+  .proc-step { position: relative; padding: 28px 24px; border: 1px solid var(--line); border-radius: var(--radius-lg); background: rgba(var(--tint), 0.02); display: flex; flex-direction: column; gap: 10px; }
+  .proc-step:not(:last-child)::after { content: ''; position: absolute; top: 46px; right: -17px; width: 18px; height: 1px; background: linear-gradient(90deg, var(--accent), transparent); }
+  .proc-n { font: 600 34px / 1 var(--font-display); color: transparent; -webkit-text-stroke: 1px rgba(125, 151, 255, 0.7); }
+  .proc-step p { margin: 0; color: var(--text-2); font-size: 15px; flex: 1; }
+  .proc-step .tag { align-self: flex-start; }
+
+  .ind { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--line); }
+  .ind-i { padding: 26px 24px 0 0; }
+  .ind-i + .ind-i { padding-left: 24px; border-left: 1px solid var(--line); }
+  .ind-h { font: 600 18px var(--font-display); letter-spacing: -0.01em; }
+  .ind-i p { margin: 8px 0 0; color: var(--text-2); font-size: 14.5px; }
+
+  @media (max-width: 1000px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .proc { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .proc-step::after { display: none; }
+    .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .stat:nth-child(3) { border-left: 0; }
+    .stat:nth-child(n + 3) { border-top: 1px solid var(--line); }
+    .ind { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .ind-i:nth-child(3) { padding-left: 0; border-left: 0; }
+  }
+  @media (max-width: 680px) {
+    .proc, .ind { grid-template-columns: 1fr; }
+    .ind-i + .ind-i { padding-left: 0; border-left: 0; }
+    .svc-row a { grid-template-columns: 40px minmax(0, 1fr) 24px; gap: 6px 14px; }
+    .svc-s { grid-column: 2 / 3; }
+    .svc-go { grid-row: 1; grid-column: 3; }
+  }
+</style>

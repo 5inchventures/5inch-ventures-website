@@ -1,0 +1,53 @@
+---
+import { u } from '../lib/url';
+import Logo from './Logo.astro';
+import { company, nav, apps, services, whatsapp } from '../data/site';
+const year = new Date().getFullYear();
+---
+<footer class="footer">
+  <div class="wrap">
+    <div class="f-grid">
+      <div class="f-brand">
+        <Logo size={30} />
+        <p class="muted">{company.description}</p>
+        <div class="f-contact">
+          <a href={`mailto:${company.email}`}>{company.email}</a>
+          <a href={`tel:+${company.phoneRaw}`}>{company.phone}</a>
+          <a href={whatsapp()} target="_blank" rel="noopener noreferrer">WhatsApp</a>
+        </div>
+      </div>
+      <div>
+        <h2 class="f-title">Company</h2>
+        <ul>{nav.map((l) => <li><a href={l.href}>{l.label}</a></li>)}<li><a href={u('/contact')}>Contact</a></li></ul>
+      </div>
+      <div>
+        <h2 class="f-title">Our apps</h2>
+        <ul>{apps.slice(0, 6).map((a) => <li><a href={u(`/work#${a.slug}`)}>{a.name}</a></li>)}</ul>
+      </div>
+      <div>
+        <h2 class="f-title">Services</h2>
+        <ul>{services.map((s) => <li><a href={u(`/services#${s.id}`)}>{s.title}</a></li>)}</ul>
+      </div>
+    </div>
+    <div class="f-bottom">
+      <span>© {year} {company.legalName}. {company.city}.</span>
+      <span class="f-status"><span class="dot" aria-hidden="true"></span> Built and run in Surat, India</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer { border-top: 1px solid var(--line); padding: 72px 0 32px; background: linear-gradient(180deg, transparent, rgba(91, 124, 255, 0.04)); }
+  .f-grid { display: grid; grid-template-columns: 1.6fr repeat(3, 1fr); gap: 40px; }
+  .f-brand p { max-width: 380px; font-size: 14.5px; margin: 18px 0; }
+  .f-contact { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 14px; }
+  .f-contact a { color: var(--text-2); text-decoration: none; }
+  .f-contact a:hover { color: var(--text); }
+  .f-title { font: 500 12px var(--font-mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin: 6px 0 14px; }
+  ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+  ul a { color: var(--text-2); text-decoration: none; font-size: 14.5px; display: inline-block; padding: 3px 0; }
+  ul a:hover { color: var(--text); }
+  .f-bottom { margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font-size: 13px; color: var(--muted); }
+  .f-status { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-mono); font-size: 12px; }
+  @media (max-width: 860px) { .f-grid { grid-template-columns: 1fr 1fr; } .f-brand { grid-column: 1 / -1; } }
+</style>

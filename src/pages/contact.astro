@@ -1,0 +1,91 @@
+---
+import Base from '../layouts/Base.astro';
+import Split from '../components/Split.astro';
+import { company, services, whatsapp } from '../data/site';
+---
+<Base title="Contact" description="Start a project with 5INCH Ventures, a product studio in Surat. Tell us about your app, platform or website — email, call or WhatsApp us.">
+  <section class="page-hero">
+    <div class="grid-bg" aria-hidden="true"></div>
+    <div class="wrap">
+      <p class="eyebrow" data-reveal><b>CONTACT</b> Start a project</p>
+      <h1 class="h1 split-h"><Split text="Tell us how your team" /> <Split text="works today." start={5} cls="grad" /></h1>
+      <p class="lead" data-reveal style="--d:.12s">A 30-minute call with the people who would build it. You leave with a rough plan, the screens you’ll need and an honest estimate.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap c-grid">
+      <form class="card c-form" id="contact-form" data-reveal novalidate>
+        <div class="row">
+          <label>Your name<input name="name" required autocomplete="name" /></label>
+          <label>Company<input name="company" autocomplete="organization" /></label>
+        </div>
+        <div class="row">
+          <label>Email<input name="email" type="email" autocomplete="email" /></label>
+          <label>Phone / WhatsApp<input name="phone" type="tel" inputmode="tel" autocomplete="tel" /></label>
+        </div>
+        <label>What do you need?
+          <select name="need">
+            {services.map((s) => <option>{s.title}</option>)}
+            <option>Not sure yet</option>
+          </select>
+        </label>
+        <label>Tell us about the project<textarea name="message" rows="5" placeholder="Who will use it, what it should do, any deadline…" required></textarea></label>
+        <p class="err" role="alert" hidden>Please add your name, a way to reach you (email or phone) and a short description.</p>
+        <div class="actions">
+          <button class="btn btn-primary" type="submit" data-via="email">Send via email <span class="arrow" aria-hidden="true">→</span></button>
+          <button class="btn btn-ghost" type="submit" data-via="whatsapp">Send on WhatsApp</button>
+        </div>
+        <p class="hint">Opens your email app or WhatsApp with everything filled in — nothing is stored on this site.</p>
+      </form>
+
+      <aside class="c-side" data-reveal style="--d:.1s">
+        <a class="card spot ch" href={`mailto:${company.email}`}><span class="k">Email</span><span class="v">{company.email}</span></a>
+        <a class="card spot ch" href={`tel:+${company.phoneRaw}`}><span class="k">Call</span><span class="v">{company.phone}</span></a>
+        <a class="card spot ch" href={whatsapp()} target="_blank" rel="noopener noreferrer"><span class="k">WhatsApp</span><span class="v">Message us directly ↗</span></a>
+        {company.offices.map((o) => (
+          <a class="card spot ch" href={o.map} target="_blank" rel="noopener noreferrer"><span class="k">{o.label}</span><span class="v small">{o.address}</span></a>
+        ))}
+      </aside>
+    </div>
+  </section>
+</Base>
+
+<script define:vars={{ email: company.email, phone: company.phoneRaw }}>
+  const form = document.getElementById('contact-form');
+  const err = form.querySelector('.err');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const via = e.submitter?.dataset.via || 'email';
+    const d = Object.fromEntries(new FormData(form));
+    const ok = d.name.trim() && (d.email.trim() || d.phone.trim()) && d.message.trim();
+    err.hidden = !!ok;
+    if (!ok) return;
+    const body = `Name: ${d.name}\nCompany: ${d.company || '-'}\nEmail: ${d.email || '-'}\nPhone: ${d.phone || '-'}\nNeed: ${d.need}\n\n${d.message}`;
+    const subject = `Project enquiry — ${d.company || d.name}`;
+    window.location.href = via === 'whatsapp'
+      ? `https://wa.me/${phone}?text=${encodeURIComponent(`${subject}\n\n${body}`)}`
+      : `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  });
+</script>
+
+<style>
+  .c-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr); gap: 20px; align-items: start; }
+  .c-form { display: flex; flex-direction: column; gap: 18px; padding: clamp(24px, 4vw, 40px); }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  label { display: flex; flex-direction: column; gap: 8px; font: 500 12px var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  input, select, textarea { font: 400 15px var(--font-body); color: var(--text); background: rgba(var(--tint), 0.03); border: 1px solid var(--line-strong); border-radius: 12px; padding: 13px 14px; text-transform: none; letter-spacing: 0; transition: border-color 0.2s, background-color 0.2s; }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); background: rgba(91, 124, 255, 0.06); }
+  select option { background: var(--bg-2); }
+  textarea { resize: vertical; }
+  .err { margin: 0; color: var(--danger); font-size: 14px; }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; }
+  .hint { margin: 0; font-size: 13px; color: var(--muted); }
+  .c-side { display: flex; flex-direction: column; gap: 12px; }
+  .ch { display: flex; flex-direction: column; gap: 6px; padding: 20px 22px; text-decoration: none; }
+  .k { font: 500 12px var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .v { font: 600 18px var(--font-display); color: var(--text); overflow-wrap: anywhere; }
+  .v.small { font: 400 14.5px var(--font-body); color: var(--text-2); }
+  @media (max-width: 900px) { .c-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 560px) { .row { grid-template-columns: 1fr; } }
+</style>

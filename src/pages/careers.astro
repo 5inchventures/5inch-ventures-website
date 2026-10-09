@@ -1,0 +1,59 @@
+---
+import Base from '../layouts/Base.astro';
+import Split from '../components/Split.astro';
+import { careers, company, capabilities } from '../data/site';
+---
+<Base title="Careers" description="Join 5INCH Ventures in Surat — a product studio shipping apps to Google Play and the App Store. Mobile, web, design and sales roles.">
+  <section class="page-hero">
+    <div class="grid-bg" aria-hidden="true"></div>
+    <div class="wrap">
+      <p class="eyebrow" data-reveal><b>CAREERS</b> Surat, India</p>
+      <h1 class="h1 split-h"><Split text="Build apps that" /> <Split text="ship to real users." start={3} cls="grad" /></h1>
+      <p class="lead" data-reveal style="--d:.12s">{careers.intro}</p>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:30px;--d:.18s" data-reveal>
+        <a class="btn btn-primary" href={`mailto:${company.email}?subject=Job%20application%20-%205INCH%20Ventures`}>Apply by email <span class="arrow" aria-hidden="true">→</span></a>
+        <a class="btn btn-ghost" href={`https://wa.me/${company.phoneRaw}?text=${encodeURIComponent('Hi, I would like to apply at 5INCH Ventures.')}`} target="_blank" rel="noopener noreferrer">Ask on WhatsApp</a>
+      </div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap">
+      <div class="grid-3">
+        {careers.values.map((v, i) => (<div class="card spot" data-reveal style={`--d:${i * 0.06}s`}><span class="n">{String(i + 1).padStart(2, '0')}</span><h2 class="h3" style="margin-top:14px">{v.title}</h2><p class="muted" style="margin:10px 0 0">{v.text}</p></div>))}
+      </div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap roles-wrap">
+      <div data-reveal>
+        <p class="eyebrow"><b>OPEN ROLES</b> We hire for</p>
+        <h2 class="h2" style="margin-top:14px">Find your <span class="muted">seat.</span></h2>
+        <p class="lead" style="margin-top:16px">One application covers all roles — tell us what you’re best at.</p>
+      </div>
+      <ul class="roles">
+        {careers.roles.map((r, i) => (
+          <li data-reveal style={`--d:${(i % 4) * 0.05}s`}>
+            <a href={`mailto:${company.email}?subject=${encodeURIComponent(`Application: ${r}`)}`}><span>{r}</span><span class="tag">Surat · Full-time</span><span class="go" aria-hidden="true">→</span></a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head"><div data-reveal><p class="eyebrow"><b>SKILLS</b> What you’ll work on</p><h2 class="h2">Real products, <span class="muted">real users.</span></h2></div></div>
+      <div class="chips" data-reveal>{capabilities.map((t) => <span class="tag">{t}</span>)}</div>
+    </div>
+  </section>
+</Base>
+<style>
+  .n { font: 500 12px var(--font-mono); color: var(--signal-text); }
+  .roles-wrap { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 56px; }
+  .roles { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+  .roles a { display: grid; grid-template-columns: 1fr auto 24px; gap: 16px; align-items: center; padding: 20px 6px; border-bottom: 1px solid var(--line); text-decoration: none; font: 600 clamp(18px, 2vw, 22px) var(--font-display); letter-spacing: -0.01em; transition: padding 0.4s var(--ease), background-color 0.3s; }
+  .roles a:hover { padding-left: 16px; background: rgba(91,124,255,.05); }
+  .go { color: var(--accent-2); }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chips .tag { min-height: 34px; padding: 0 14px; font-size: 13px; color: var(--text); }
+  @media (max-width: 860px) { .roles-wrap { grid-template-columns: 1fr; gap: 24px; } .roles .tag { display: none; } .roles a { grid-template-columns: 1fr 24px; } }
+</style>

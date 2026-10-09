@@ -1,0 +1,11 @@
+---
+interface Props { fig: string; label: string; title: string; lead?: string; as?: 'h1' | 'h2' }
+const { fig, label, title, lead, as: Tag = 'h2' } = Astro.props;
+---
+<div class="section-head">
+  <div data-reveal>
+    <p class="eyebrow"><b>{fig}</b> {label}</p>
+    <Tag class={Tag === 'h1' ? 'h1' : 'h2'} set:html={title} />
+  </div>
+  {lead && <p class="lead" data-reveal style="--d:.08s">{lead}</p>}
+</div>
